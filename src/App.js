@@ -10,11 +10,14 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
+      roomId: null,
       messages: [],
       joinableRooms: [],
       joinedRooms: []
     }
     this.sendMessage = this.sendMessage.bind(this)
+    this.subscribeToRoom = this.subscribeToRoom.bind(this)
+    this.getRooms = this.getRooms.bind(this)
   }
 
   componentDidMount() {
@@ -32,37 +35,54 @@ class App extends Component {
       .then(currentUser => {
         this.currentUser = currentUser;
 
-        this.currentUser.getJoinableRooms()
-          .then(joinableRooms => {
-            this.setState({
-              joinableRooms,
-              joinedRooms: this.currentUser.rooms
-            })
-          })
-          .catch( err => {
-            console.log(`Error on joinableRooms: ${err}`)
-          })
+        this.getRooms()
+      })
+      .catch(err => {
+        console.log(`Error on connecting: ${err}`)
+      })
+  }
 
-
-        this.currentUser.subscribeToRoom({
-          roomId: this.currentUser.rooms[0].id,
-          hooks: {
-            onNewMessage: message => {
-              console.log('Received new message: ', message.text)
-              this.setState({
-                messages: [...this.state.messages, message]
-              })
-            }
-          },
-          messageLimit: 20
+  getRooms() {
+    this.currentUser.getJoinableRooms()
+      .then(joinableRooms => {
+        this.setState({
+          joinableRooms,
+          joinedRooms: this.currentUser.rooms
         })
       })
+      .catch( err => {
+        console.log(`Error on joinableRooms: ${err}`)
+      })
+  }
+
+  subscribeToRoom(roomId) {
+    this.setState({ messages: [] })
+    this.currentUser.subscribeToRoom({
+      roomId: roomId,
+      hooks: {
+        onNewMessage: message => {
+          this.setState({
+            messages: [...this.state.messages, message]
+          })
+        }
+      },
+      messageLimit: 20
+    })
+    .then(room => {
+      this.setState({
+        roomId: room.id
+      })
+      this.getRooms()
+    })
+    .catch(err => {
+      console.log(`Error on subscribing to room: ${err}`)
+    })
   }
 
   sendMessage(text) {
     this.currentUser.sendMessage({
       text,
-      roomId: this.currentUser.rooms[0].id
+      roomId: this.state.roomId
     })
   }
 
@@ -71,7 +91,7 @@ class App extends Component {
       <div className="App">
         <MessageList messages={this.state.messages}/>
         <SendMessageForm sendMessage={this.sendMessage}/>
-        <Rooms rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}/>
+        <Rooms subscribeToRoom={this.subscribeToRoom} rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}/>
       </div>
     );
   }
