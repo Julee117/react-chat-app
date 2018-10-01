@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
 import MessageList from './components/MessageList';
+import SendMessageForm from './components/SendMessageForm';
 import Chatkit from '@pusher/chatkit';
 
 class App extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      messages: []
+    }
+    this.sendMessage = this.sendMessage.bind(this)
+  }
 
   componentDidMount() {
     const tokenProvider = new Chatkit.TokenProvider({
@@ -18,11 +27,15 @@ class App extends Component {
 
     chatManager.connect()
       .then(currentUser => {
-        currentUser.subscribeToRoom({
-          roomId: currentUser.rooms[0].id,
+        this.currentUser = currentUser;
+        this.currentUser.subscribeToRoom({
+          roomId: this.currentUser.rooms[0].id,
           hooks: {
             onNewMessage: message => {
               console.log('Received new message: ', message.text)
+              this.setState({
+                messages: [...this.state.messages, message]
+              })
             }
           },
           messageLimit: 20
@@ -30,13 +43,18 @@ class App extends Component {
       })
   }
 
+  sendMessage(text) {
+    this.currentUser.sendMessage({
+      text,
+      roomId: this.currentUser.rooms[0].id
+    })
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <MessageList />
+        <MessageList messages={this.state.messages}/>
+        <SendMessageForm sendMessage={this.sendMessage}/>
       </div>
     );
   }
