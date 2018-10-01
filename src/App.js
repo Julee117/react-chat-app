@@ -3,6 +3,7 @@ import './App.css';
 import MessageList from './components/MessageList';
 import SendMessageForm from './components/SendMessageForm';
 import Rooms from './components/Rooms';
+import NewRoomForm from './components/NewRoomForm';
 import Chatkit from '@pusher/chatkit';
 
 class App extends Component {
@@ -91,7 +92,11 @@ class App extends Component {
       <div className="App">
         <MessageList messages={this.state.messages}/>
         <SendMessageForm sendMessage={this.sendMessage}/>
-        <Rooms subscribeToRoom={this.subscribeToRoom} rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}/>
+        <Rooms
+          roomId={this.state.roomId}
+          subscribeToRoom={this.subscribeToRoom}
+          rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}/>
+        <NewRoomForm />
       </div>
     );
   }
