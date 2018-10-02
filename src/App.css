@@ -14,6 +14,9 @@
 
 .new-room-form {
   grid-area: n;
+  padding: 0px 5px;
+  background: var(--secondary-color);
+  color: var(--main-text-color);
 }
 
 .rooms-list {
@@ -22,6 +25,7 @@
 
 .message-list {
   grid-area: m;
+  padding: 10px;
 }
 
 .send-message-form {
@@ -58,5 +62,26 @@
 }
 
 .rooms-list .room.active a {
+  color: var(--secondary-color);
+}
+
+.join-room {
+  text-align: center;
+  font-size: 3rem;
+  padding-top: 25%;
+}
+
+.message-username {
+  font-weight: 400;
+  font-size: 1.2rem;
+  padding: 5px 0px;
+}
+
+.message-text {
+  font-size: 1.1rem;
+  background-color: var(--main-color);
+  border-radius: 5px;
+  display: inline;
+  padding: 0px 5px;
   color: var(--secondary-color);
 }
