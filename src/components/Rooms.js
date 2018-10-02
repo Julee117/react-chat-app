@@ -4,7 +4,7 @@ class Rooms extends React.Component {
   render() {
     const orderedRooms = [...this.props.rooms].sort((a, b) => a.id - b.id);
     return (
-      <div>
+      <div className="rooms-list">
         <h3>Your rooms:</h3>
         {orderedRooms.map(room => {
           const active = this.props.roomId === room.id ? "active" : "";
