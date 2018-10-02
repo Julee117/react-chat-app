@@ -1,14 +1,20 @@
 :root {
   --main-color: #5ea3d0;
+  --secondary-color: white;
   --main-text-color: #3e5869;
+  --secondary-text-color: #b0c7d6;
   --send-message-form: #F5F5F5;
 }
 
-body {
+html, body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   height: 100%;
   font-weight: 200;
   color: #3e5869;
+}
+
+#root {
+  height: 100%;
 }
