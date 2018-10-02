@@ -15,16 +15,25 @@ class NewRoomForm extends React.Component {
     })
   }
 
+  handleOnSubmit = event => {
+    event.preventDefault();
+    this.props.createRoom(this.state.roomName)
+    this.setState({
+      roomName: ""
+    })
+  }
+
   render() {
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleOnSubmit}>
           <input
             onChange={this.handleChange}
             text="text"
             placeholder="NewRoomForm"
+            value={this.state.roomName}
           />
-        <button type="submit"></button>
+        <button type="submit">+</button>
         </form>
       </div>
     )
