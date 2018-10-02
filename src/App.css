@@ -19,6 +19,17 @@
   color: var(--main-text-color);
 }
 
+.new-room-form input {
+  border: none;
+  font-size: 1.1rem;
+  padding: 10px 0px;
+}
+
+.new-room-form button {
+  border: none;
+  font-size: 1.1rem;
+}
+
 .rooms-list {
   grid-area: r;
 }
@@ -84,4 +95,14 @@
   display: inline;
   padding: 0px 5px;
   color: var(--secondary-color);
+}
+
+input[type="text"] {
+  border: none;
+}
+
+.send-message-form input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 10px 0px 10px 5px;
 }
